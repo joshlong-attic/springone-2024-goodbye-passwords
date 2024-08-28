@@ -1,4 +1,6 @@
-# Notes on Passkeys with Mr. Winch
+# Goodbye, Passwords
+
+with Spring Security lead Rob Winch and Spring Developer Advocate Josh Long
 
 [Slides](https://docs.google.com/presentation/d/1mi6xGsGBq9PjxzOj1W9oEtFHBnfE61X8nrr5K_FcHLo/edit?usp=sharing)
 
