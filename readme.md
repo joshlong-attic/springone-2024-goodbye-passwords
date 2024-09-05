@@ -108,7 +108,15 @@ cd spring-security-webauthn
         <version>0.0.1-SNAPSHOT</version>
     </dependency>
 ```
-* add Marcus' build of Spring Security on a particular branch:  https://github.com/marcusdacoregio/spring-security on branch `gh-15114-passwordless-ott`. `./gradlew publishToMavenLocal`
+* Add snapshot repository
+```
+	<repositories>
+		<repository>
+			<id>spring-snapshot</id>
+			<url>https://repo.spring.io/snapshot</url>
+		</repository>
+	</repositories>
+```
 * specify the following in `pom.xml`:
 ```
 	<spring-security.version>6.4.0-SNAPSHOT</spring-security.version>
