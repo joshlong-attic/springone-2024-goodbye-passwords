@@ -44,6 +44,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--
+            git clone https://github.com/rwinch/spring-security-webauthn/
+            cd spring-security-webauthn
+            ./gradlew publishToMavenLocal
+        -->
         <dependency>
             <groupId>io.github.rwinch.webauthn</groupId>
             <artifactId>spring-security-webauthn</artifactId>

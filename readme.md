@@ -94,6 +94,12 @@ UserDetailsPasswordService userDetailsPasswordService(UserDetailsManager userDet
 ``` 
 * now restart the app and login as rob or josh and see that their pw in the db users table has been upgraded transparently. nice!
 * RW: Passkeys slides
+* ensure to install webauthn support
+```
+git clone https://github.com/rwinch/spring-security-webauthn/
+cd spring-security-webauthn
+./gradlew publishToMavenLocal
+```
 * add the dependency:
 ```
     <dependency>
