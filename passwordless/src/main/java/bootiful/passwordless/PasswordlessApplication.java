@@ -23,7 +23,8 @@ import javax.sql.DataSource;
 import java.security.Principal;
 import java.util.Map;
 
-import static org.springframework.security.config.annotation.web.configurers.WebauthnConfigurer.webauthn;
+import static org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer.authorizationServer;
+
 
 @SpringBootApplication
 public class PasswordlessApplication {
@@ -46,12 +47,11 @@ public class PasswordlessApplication {
         };
     }
 
-    @Bean
+/*    @Bean
     @Order(1)
     SecurityFilterChain authServerFilterChain(HttpSecurity http) throws Exception {
-        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-                .oidc(Customizer.withDefaults());
+//        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(Customizer.withDefaults());
         http
                 .exceptionHandling((exceptions) -> exceptions
                         .defaultAuthenticationEntryPointFor(
@@ -61,23 +61,25 @@ public class PasswordlessApplication {
                 )
                 .oauth2ResourceServer((resourceServer) -> resourceServer.jwt(Customizer.withDefaults()));
         return http.build();
-    }
+    }*/
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .with(authorizationServer(), as -> as.oidc(Customizer.withDefaults()))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
-                .oneTimeTokenLogin(configurer -> configurer.generatedOneTimeTokenSuccessHandler((request, response, oneTimeToken) -> {
-                    var msg = "go to http://localhost:8080/login/ott?token=" + oneTimeToken.getTokenValue();
-                    System.out.println(msg);
-                    response.setContentType(MediaType.TEXT_PLAIN_VALUE);
-                    response.getWriter().print("you've got console mail!");
-                }))
-                .with(webauthn(), c -> c
+                .oneTimeTokenLogin(configurer -> configurer.tokenGenerationSuccessHandler(
+                        (request, response, oneTimeToken) -> {
+                            var msg = "go to http://localhost:8080/login/ott?token=" + oneTimeToken.getTokenValue();
+                            System.out.println(msg);
+                            response.setContentType(MediaType.TEXT_PLAIN_VALUE);
+                            response.getWriter().print("you've got console mail!");
+                        }))
+                .webAuthn(c -> c
                         .rpId("localhost")
                         .rpName("bootiful passkeys")
                         .allowedOrigins("http://localhost:8080")
